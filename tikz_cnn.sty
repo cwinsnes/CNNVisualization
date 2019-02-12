@@ -1,3 +1,49 @@
+% This style file adds a neuralnetwork environment to latex with some drawing functionalities useful for visualizing neural networks.
+%
+%
+% NOTE: This file contains a a modified version of the tikz_cnn function \networkLayer,  copyright of Jethro Tan, licensed under MIT license.
+%       In this file it is called \c@nn@networklayer.
+%
+% The LICENSE notice for \c@nn@networklayer/\networkLayer is:
+% MIT License
+%
+% Copyright (c) 2017 Jethro Tan
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
+% of this software and associated documentation files (the "Software"), to deal
+% in the Software without restriction, including without limitation the rights
+% to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+% copies of the Software, and to permit persons to whom the Software is
+% furnished to do so, subject to the following conditions:
+%
+% The above copyright notice and this permission notice shall be included in all
+% copies or substantial portions of the Software.
+%
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+% IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+% OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+%
+%
+% The rest of the contents is licensed under GPL3.
+% Copyright (C) 2019  Casper Winsnes
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 \NeedsTeXFormat{LaTeX2e}
 
 \RequirePackage{graphicx}
@@ -43,6 +89,7 @@
 \newcommand\c@nn@clayerkeyset[1]{\pgfkeys{/c/layer/.cd,#1}}
 \newcommand\c@nn@carrowkeyset[1]{\pgfkeys{/c/arrow/.cd,#1}}
 
+% LICENSED under MIT license, copyright of Jethro Tan, 2017.
 \newcommand{\c@nn@networklayer}[1]{%%
   \begingroup
   \c@nn@clayerkeyset{#1,
