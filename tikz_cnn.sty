@@ -1,0 +1,164 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\RequirePackage{graphicx}
+\RequirePackage{color}
+\RequirePackage{tikz}
+\RequirePackage{pgfkeys}
+\RequirePackage{tikzscale}
+\RequirePackage{ifthen}
+
+\relax
+\usetikzlibrary{3d}
+\makeatletter
+
+\pgfkeys{/c/layer/.cd,
+  height/.initial=3.0,
+  width/.initial=\pgfkeysvalueof{/c/nn/height},
+  depth/.initial=0.1, % of the layer
+  xoff/.initial=0.0, %offsets
+  yoff/.initial=0.0,
+  zoff/.initial=0.0,
+  color/.initial=white,
+  text/.initial=,
+  textbelow/.initial=\pgfkeysvalueof{/c/nn/text},,
+  textabove/.initial=,
+  image/.initial=,
+}
+
+\pgfkeys{/c/arrow/.cd,
+  fx/.initial=0.0,
+  fy/.initial=0.0,
+  fz/.initial=0.0,
+  tx/.initial=0.0,
+  ty/.initial=0.0,
+  tz/.initial=0.0,
+  angled/.initial=F, % Note, only use one of angled or curved
+  curved/.initial=F, % If both are T, angled takes precedence
+  line/.initial=F, % Draw only the line
+  arrowdir/.initial=left, % Right or left. Only works on curved lines.
+  textbelow/.initial=,
+  textabove/.initial=,
+}
+
+\newcommand\c@nn@clayerkeyset[1]{\pgfkeys{/c/layer/.cd,#1}}
+\newcommand\c@nn@carrowkeyset[1]{\pgfkeys{/c/arrow/.cd,#1}}
+
+\newcommand{\c@nn@networklayer}[1]{%%
+  \begingroup
+  \c@nn@clayerkeyset{#1,
+    height/.get=\height,
+    width/.get=\width,
+    depth/.get=\depth,
+    xoff/.get=\xoff,
+    yoff/.get=\yoff,
+    zoff/.get=\zoff,
+    color/.get=\color,
+    textbelow/.get=\textbelow,
+    textabove/.get=\textabove,
+  }
+  \def\eps{0.02}
+
+  \begin{scope}[canvas is xy plane at z=\zoff, transform shape]
+
+  \filldraw[color=\color] (\xoff,\eps+\yoff,\height) -- (\depth+\xoff,\yoff,\height) -- (\depth+\xoff-\eps,\width+\yoff-\eps,\height) -- (\xoff+\eps,\width+\yoff-\eps,\height) -- (\xoff+\eps,\eps+\yoff,\height); % front plane
+  \filldraw[color=\color] (\xoff+\eps,\width+\yoff,\height-\eps) -- (\depth+\xoff-\eps,\width+\yoff,\height-\eps) -- (\depth+\xoff-\eps,\width+\yoff,\eps) -- (\xoff+\eps,\width+\yoff,\eps);
+  \filldraw[color=\color] (\depth+\xoff,\eps+\yoff,\height-\eps) -- (\depth+\xoff,\eps+\yoff,\eps) -- (\depth+\xoff,\width-\eps+\yoff,\eps) -- (\depth+\xoff,\width-\eps+\yoff,\height-\eps);
+
+  \draw[line width=0.3mm](\xoff,\yoff,\height) -- (\depth+\xoff,\yoff,\height) -- (\depth+\xoff,\width+\yoff,\height) -- (\xoff,\width+\yoff,\height) -- (\xoff,\yoff,\height); % front plane
+  \draw[line width=0.3mm](\depth+\xoff,\yoff,0) -- (\depth+\xoff,\width+\yoff,0) -- (\xoff,\width+\yoff,0); % back plane
+  \draw[line width=0.3mm](\depth+\xoff,\yoff,0) -- (\depth+\xoff,\yoff,\height);
+  \draw[line width=0.3mm](\depth+\xoff,\width+\yoff,0) -- (\depth+\xoff,\width+\yoff,\height);
+  \draw[line width=0.3mm](\xoff,\width+\yoff,0) -- (\xoff,\width+\yoff,\height);
+
+  \node[below,align=center] at (\xoff,\yoff, \zoff+\width) {\textbelow};
+  \node[above,align=center] at (\xoff,\yoff+\height, 0) {\textabove};
+
+  \end{scope}
+  \endgroup
+}
+
+\newcommand{\c@nn@image}[1]{%%
+  \begingroup
+  \c@nn@clayerkeyset{#1,
+    height/.get=\height, % Note that height and width are given in  pts!
+    width/.get=\width,
+    xoff/.get=\xoff,
+    yoff/.get=\yoff,
+    zoff/.get=\zoff,
+    image/.get=\image,
+    textabove/.get=\textabove,
+    textbelow/.get=\textbelow,
+  }
+
+  \begin{scope}[canvas is zy plane at x=\xoff,transform shape]
+    \node[draw,rectangle,inner sep=0pt,anchor=south west](image) at(\yoff, \zoff){\includegraphics[width=\width,height=\height]{\image}};
+  \end{scope}%%
+
+  % Divide by 28.453 to go from pt to tikz scale
+  \node[below,align=center] at (\xoff,\yoff, \zoff+\width/28.453) {\textbelow};
+  \node[above,align=center] at (\xoff,\yoff+\height/28.453, 0) {\textabove};
+
+  \endgroup
+}
+
+\newcommand{\c@nn@arrow}[1]{%%
+  \begingroup
+  \c@nn@carrowkeyset{#1,
+    fx/.get=\fromxoff,
+    fy/.get=\fromyoff,
+    fz/.get=\fromzoff,
+    tx/.get=\toxoff,
+    ty/.get=\toyoff,
+    tz/.get=\tozoff,
+    angled/.get=\angled,
+    curved/.get=\curved,
+    line/.get=\lineonly,
+    arrowdir/.get=\arrowdir,
+    textbelow/.get=\textbelow,
+    textabove/.get=\textabove,
+    }
+
+    \ifthenelse{\equal{\lineonly}{F}}
+    {\def\arrowhead{->}}
+    {\def\arrowhead{}}
+
+    \coordinate (from) at (\fromxoff, \fromyoff, \fromzoff);
+    \coordinate (to) at (\toxoff, \toyoff, \tozoff);
+
+    \ifthenelse{\equal{\angled}{F}}
+    {
+      \ifthenelse{\equal{\curved}{F}}
+      {\draw[line width=0.07mm, \arrowhead] (from) -- node [above] {\textabove} node [midway, below] {\textbelow} (to);}
+      {\draw[line width=0.07mm, \arrowhead] (from) to [bend \arrowdir=] node [above] {\textabove} node [below] {\textbelow} (to);}
+    }
+    {\draw[line width=0.07mm, \arrowhead] (from)  -|  node [pos=0.25, above] {\textabove} node [pos=0.25, below] {\textbelow} (to);}
+
+  \endgroup
+}
+
+\newcommand{\c@nn@rectangle}[1]{%%
+  \c@nn@clayerkeyset{#1,
+    height/.get=\height,
+    width/.get=\width,
+    xoff/.get=\xoff,
+    yoff/.get=\yoff,
+    zoff/.get=\zoff,
+    text/.get=\text,
+  }
+  \draw[line width=0.07] (\xoff, \yoff, 'zoff) rectangle ++(\width, \height, 0);
+}
+
+\newenvironment{neuralnet}
+{%
+  \begin{tikzpicture}
+  \draw[use as bounding box, transparent] (-1.8, -1.8) rectangle (17.2, 3.2);
+  \newcommand{\image}[1]{\c@nn@image{##1}}
+  \newcommand{\networklayer}[1]{\c@nn@networklayer{##1}}
+  \newcommand{\arrow}[1]{\c@nn@arrow{##1}}
+}
+{
+  \end{tikzpicture}
+}
+
+\makeatother
+\endinput
