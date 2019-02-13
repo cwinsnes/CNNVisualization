@@ -138,7 +138,10 @@
   }
 
   \begin{scope}[canvas is zy plane at x=\xoff,transform shape]
-    \node[draw,rectangle,inner sep=0pt,anchor=south west](image) at(\yoff, \zoff){\includegraphics[width=\width,height=\height]{\image}};
+    \node[draw,rectangle,inner sep=0pt,anchor=south west](image) at(\yoff, \zoff){
+      % The scalebox is used to reverse the flip made from drawing this way in the zy plane.
+      \scalebox{-1}[1]{\includegraphics[width=\width,height=\height]{\image}}
+    };
   \end{scope}%%
 
   % Divide by 28.453 to go from pt to tikz scale
@@ -184,15 +187,24 @@
 }
 
 \newcommand{\c@nn@rectangle}[1]{%%
+  \begingroup
   \c@nn@clayerkeyset{#1,
     height/.get=\height,
     width/.get=\width,
     xoff/.get=\xoff,
     yoff/.get=\yoff,
     zoff/.get=\zoff,
-    text/.get=\text,
+    text/.get=\text, % Either text or image is allowed
+    image/.get=\image, % NOTE: If an image is provided, height and width has to be given in pts.
   }
-  \draw[line width=0.07] (\xoff, \yoff, \zoff) rectangle ++(\width, \height, 0) node[pos=0.5, align=center] {\text};
+  \ifthenelse{\equal{image}{}}
+  {\draw[line width=0.07] (\xoff, \yoff, \zoff) rectangle ++(\width, \height, 0) node[pos=0.5, align=center] {\text};}
+  {
+    \begin{scope}[canvas is xy plane at z=\zoff,transform shape]
+      \node[draw,rectangle,inner sep=0pt,anchor=south west](image) at(\xoff, \yoff){\includegraphics[width=\width,height=\height]{\image}};
+    \end{scope}%%
+  }
+  \endgroup
 }
 
 \newenvironment{neuralnet}
