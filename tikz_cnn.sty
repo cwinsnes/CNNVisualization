@@ -106,20 +106,18 @@
   \def\eps{0.02}
 
   \begin{scope}[canvas is xy plane at z=\zoff, transform shape]
+    \filldraw[color=\color] (\xoff,\eps+\yoff,\height) -- (\depth+\xoff,\yoff,\height) -- (\depth+\xoff-\eps,\width+\yoff-\eps,\height) -- (\xoff+\eps,\width+\yoff-\eps,\height) -- (\xoff+\eps,\eps+\yoff,\height); % front plane
+    \filldraw[color=\color] (\xoff+\eps,\width+\yoff,\height-\eps) -- (\depth+\xoff-\eps,\width+\yoff,\height-\eps) -- (\depth+\xoff-\eps,\width+\yoff,\eps) -- (\xoff+\eps,\width+\yoff,\eps);
+    \filldraw[color=\color] (\depth+\xoff,\eps+\yoff,\height-\eps) -- (\depth+\xoff,\eps+\yoff,\eps) -- (\depth+\xoff,\width-\eps+\yoff,\eps) -- (\depth+\xoff,\width-\eps+\yoff,\height-\eps);
 
-  \filldraw[color=\color] (\xoff,\eps+\yoff,\height) -- (\depth+\xoff,\yoff,\height) -- (\depth+\xoff-\eps,\width+\yoff-\eps,\height) -- (\xoff+\eps,\width+\yoff-\eps,\height) -- (\xoff+\eps,\eps+\yoff,\height); % front plane
-  \filldraw[color=\color] (\xoff+\eps,\width+\yoff,\height-\eps) -- (\depth+\xoff-\eps,\width+\yoff,\height-\eps) -- (\depth+\xoff-\eps,\width+\yoff,\eps) -- (\xoff+\eps,\width+\yoff,\eps);
-  \filldraw[color=\color] (\depth+\xoff,\eps+\yoff,\height-\eps) -- (\depth+\xoff,\eps+\yoff,\eps) -- (\depth+\xoff,\width-\eps+\yoff,\eps) -- (\depth+\xoff,\width-\eps+\yoff,\height-\eps);
+    \draw[line width=0.3mm](\xoff,\yoff,\height) -- (\depth+\xoff,\yoff,\height) -- (\depth+\xoff,\width+\yoff,\height) -- (\xoff,\width+\yoff,\height) -- (\xoff,\yoff,\height); % front plane
+    \draw[line width=0.3mm](\depth+\xoff,\yoff,0) -- (\depth+\xoff,\width+\yoff,0) -- (\xoff,\width+\yoff,0); % back plane
+    \draw[line width=0.3mm](\depth+\xoff,\yoff,0) -- (\depth+\xoff,\yoff,\height);
+    \draw[line width=0.3mm](\depth+\xoff,\width+\yoff,0) -- (\depth+\xoff,\width+\yoff,\height);
+    \draw[line width=0.3mm](\xoff,\width+\yoff,0) -- (\xoff,\width+\yoff,\height);
 
-  \draw[line width=0.3mm](\xoff,\yoff,\height) -- (\depth+\xoff,\yoff,\height) -- (\depth+\xoff,\width+\yoff,\height) -- (\xoff,\width+\yoff,\height) -- (\xoff,\yoff,\height); % front plane
-  \draw[line width=0.3mm](\depth+\xoff,\yoff,0) -- (\depth+\xoff,\width+\yoff,0) -- (\xoff,\width+\yoff,0); % back plane
-  \draw[line width=0.3mm](\depth+\xoff,\yoff,0) -- (\depth+\xoff,\yoff,\height);
-  \draw[line width=0.3mm](\depth+\xoff,\width+\yoff,0) -- (\depth+\xoff,\width+\yoff,\height);
-  \draw[line width=0.3mm](\xoff,\width+\yoff,0) -- (\xoff,\width+\yoff,\height);
-
-  \node[below,align=center] at (\xoff,\yoff, \zoff+\width) {\textbelow};
-  \node[above,align=center] at (\xoff,\yoff+\height, 0) {\textabove};
-
+    \node[below,align=center] at (\xoff,\yoff, \zoff+\width) {\textbelow};
+    \node[above,align=center] at (\xoff,\yoff+\height, 0) {\textabove};
   \end{scope}
   \endgroup
 }
@@ -221,4 +219,3 @@
 }
 
 \makeatother
-\endinput
