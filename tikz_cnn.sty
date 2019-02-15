@@ -64,7 +64,7 @@
   xoff/.initial=0.0, %offsets
   yoff/.initial=0.0,
   zoff/.initial=0.0,
-  color/.initial=white,
+  color/.initial=red,
   text/.initial=,
   textbelow/.initial=\pgfkeysvalueof{/c/layer/text},
   textabove/.initial=,
@@ -78,9 +78,10 @@
   tx/.initial=0.0,
   ty/.initial=0.0,
   tz/.initial=0.0,
+  color/.initial=black,
   angled/.initial=F, % Note, only use one of angled or curved
   curved/.initial=F, % If both are T, angled takes precedence
-  line/.initial=F, % Draw only the line
+  arrowhead/.initial=->, % Options: any of tikz arrowhead options
   arrowdir/.initial=left, % Right or left. Only works on curved lines.
   text/.initial=,
   textbelow/.initial=\pgfkeysvalueof{/c/arrow/text},
@@ -161,15 +162,12 @@
     tz/.get=\tozoff,
     angled/.get=\angled,
     curved/.get=\curved,
-    line/.get=\lineonly,
+    arrowhead/.get=\arrowhead,
     arrowdir/.get=\arrowdir,
     textbelow/.get=\textbelow,
     textabove/.get=\textabove,
+    color/.get=\color,
     }
-
-    \ifthenelse{\equal{\lineonly}{F}}
-    {\def\arrowhead{->}}
-    {\def\arrowhead{}}
 
     \coordinate (from) at (\fromxoff, \fromyoff, \fromzoff);
     \coordinate (to) at (\toxoff, \toyoff, \tozoff);
@@ -177,11 +175,24 @@
     \ifthenelse{\equal{\angled}{F}}
     {
       \ifthenelse{\equal{\curved}{F}}
-      {\draw[line width=0.07mm, \arrowhead] (from) -- node [above] {\textabove} node [midway, below] {\textbelow} (to);}
-      {\draw[line width=0.07mm, \arrowhead] (from) to [bend \arrowdir=] node [above] {\textabove} node [below] {\textbelow} (to);}
+      {\draw[line width=0.07mm, color=\color, \arrowhead] (from) -- node [above] {\textabove} node [midway, below] {\textbelow} (to);}
+      {\draw[line width=0.07mm, color=\color, \arrowhead] (from) to [bend \arrowdir=] node [above] {\textabove} node [below] {\textbelow} (to);}
     }
-    {\draw[line width=0.07mm, \arrowhead] (from)  -|  node [pos=0.25, above] {\textabove} node [pos=0.25, below] {\textbelow} (to);}
+    {\draw[line width=0.07mm, color=\color, \arrowhead] (from)  -|  node [pos=0.25, above] {\textabove} node [pos=0.25, below] {\textbelow} (to);}
 
+  \endgroup
+}
+
+\newcommand{\c@nn@text}[1]{%%
+  \begingroup
+  \c@nn@clayerkeyset{#1,
+    xoff/.get=\xoff,
+    yoff/.get=\yoff,
+    zoff/.get=\zoff,
+    text/.get=\text,
+  }
+
+  \node at (\xoff, \yoff, \zoff) {\text};
   \endgroup
 }
 
@@ -214,6 +225,7 @@
   \newcommand{\networklayer}[1]{\c@nn@networklayer{##1}}
   \newcommand{\arrow}[1]{\c@nn@arrow{##1}}
   \newcommand{\rectangle}[1]{\c@nn@rectangle{##1}}
+  \newcommand{\text}[1]{\c@nn@text{##1}}
 }
 {
   \end{tikzpicture}
