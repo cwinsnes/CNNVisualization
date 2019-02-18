@@ -119,12 +119,12 @@
     \draw[line width=0.3mm](\depth+\xoff,\yoff,0) -- (\depth+\xoff,\yoff,\height);
     \draw[line width=0.3mm](\depth+\xoff,\width+\yoff,0) -- (\depth+\xoff,\width+\yoff,\height);
     \draw[line width=0.3mm](\xoff,\width+\yoff,0) -- (\xoff,\width+\yoff,\height);
-
-    % Here we have to switch height and width again
-    \node[below,align=center] at (\xoff+\depth/2,\yoff, \zoff+\height) {\textbelow};
-    \node[above,align=center] at (\xoff+\depth/2,\yoff+\width, 0) {\textabove};
-    \node[align=center] at (\xoff+\depth/2,\yoff+\height/2, \zoff+\width) {\textmiddle};
   \end{scope}
+
+  % Here we have to switch height and width again
+  \node[below,align=center] at (\xoff+\depth/2,\yoff, \zoff+\height) {\textbelow};
+  \node[above,align=center] at (\xoff+\depth/2,\yoff+\width, 0) {\textabove};
+  \node[align=center] at (\xoff+\depth/2,\yoff+\height/2, \zoff+\width) {\textmiddle};
   \endgroup
 }
 
