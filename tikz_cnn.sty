@@ -68,6 +68,7 @@
   text/.initial=,
   textbelow/.initial=\pgfkeysvalueof{/c/layer/text},
   textabove/.initial=,
+  textmiddle/.initial=,
   image/.initial=,
 }
 
@@ -104,6 +105,7 @@
     color/.get=\color,
     textbelow/.get=\textbelow,
     textabove/.get=\textabove,
+    textmiddle/.get=\textmiddle,
   }
   \def\eps{0.02}
 
@@ -118,8 +120,10 @@
     \draw[line width=0.3mm](\depth+\xoff,\width+\yoff,0) -- (\depth+\xoff,\width+\yoff,\height);
     \draw[line width=0.3mm](\xoff,\width+\yoff,0) -- (\xoff,\width+\yoff,\height);
 
-    \node[below,align=center] at (\xoff,\yoff, \zoff+\width) {\textbelow};
-    \node[above,align=center] at (\xoff,\yoff+\height, 0) {\textabove};
+    % Here we have to switch height and width again
+    \node[below,align=center] at (\xoff+\depth/2,\yoff, \zoff+\height) {\textbelow};
+    \node[above,align=center] at (\xoff+\depth/2,\yoff+\width, 0) {\textabove};
+    \node[align=center] at (\xoff+\depth/2,\yoff+\height/2, \zoff+\width) {\textmiddle};
   \end{scope}
   \endgroup
 }
