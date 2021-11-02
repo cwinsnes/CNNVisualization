@@ -284,7 +284,3 @@ TSWLatexianTemp*
 
 # End of https://www.gitignore.io/api/linux,latex
 bestfitting.tex
-*.dot
-*.png
-*.pdf
-*.jpg

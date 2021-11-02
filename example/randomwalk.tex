@@ -1,0 +1,87 @@
+\documentclass{report}
+\usepackage{tikz_cnn}
+\usepackage{varwidth}
+\usepackage{numprint}
+\npthousandsep{,}
+
+\def\densenet169{red!30!}
+\def\ibndensenet121{blue!20!}
+\def\seresnet{yellow!20!}
+\def\resnet34{magenta!20!}
+\def\resnett18{magenta!15!}
+\def\xception{green!20!}
+\def\inception{olive!30!}
+
+\pgfkeys{c/random/.cd,
+  0/.initial=resnet18,
+  0p/.initial=\numprint{12000000},
+  0t/.initial=\footnotesize{x5 CV},
+  0c/.initial=\resnett18,
+  1/.initial=resnet18,
+  1p/.initial=\numprint{12000000},
+  1t/.initial=\footnotesize{x5 CV},
+  1c/.initial=\resnett18,
+  2/.initial=resnet18,
+  2p/.initial=\numprint{12000000},
+  2t/.initial=\footnotesize{x5 CV},
+  2c/.initial=\resnett18
+}
+
+\def\dist{6}
+\begin{document}
+
+\begin{neuralnet}
+  \rectangle{image=input_attention_example.png, yoff=-1.35, xoff=-6, width=0.25\textwidth, height=0.25\textwidth}
+  \arrow{fx=-5.5, fy=6.3-\dist*1, tx=-1.8, ty=6.3-\dist*1, arrowhead={}}
+  \arrow{fx=-1.8, tx=-1.8, fy=6.3-\dist*0, ty=6.3-\dist*2, arrowhead={}}
+  \foreach \i in {0,...,2}{
+    \edef\currcol{\pgfkeysvalueof{/c/random/\i c}}
+    \wlog{\currcol}
+
+     \arrow{fx=-1.8, tx=-0.8, fy=6.3-\dist*\i, ty=6.3-\dist*\i}
+     \arrow{fx=4.8, tx=4.8, fy=6-\dist*\i, ty=5-\dist*\i, arrowhead={->}}
+     \arrow{fx=4.8, tx=3.6, fy=4.9-\dist*\i, ty=4.9-\dist*\i, arrowhead={},
+       arrowdir=right, curved=T}
+     \arrow{fx=4.8, tx=2.4, fy=5.2-\dist*\i, ty=3.9-\dist*\i, arrowhead={},
+       arrowdir=right, curved=T}
+
+     \rectangle{image=attention00.jpg, xoff=4.3, yoff=4.5-\dist*\i, width=0.08\textwidth, height=0.08\textwidth}
+     \rectangle{image=attention00.jpg, xoff=3.1, yoff=3.2-\dist*\i, width=0.08\textwidth, height=0.08\textwidth}
+     \rectangle{image=attention00.jpg, xoff=1.85, yoff=1.9-\dist*\i, width=0.08\textwidth, height=0.08\textwidth}
+     \circle{text=A, xoff=3.6, yoff=4.7-\dist*\i}
+     \circle{text=A, xoff=2.4, yoff=3.7-\dist*\i}
+     \arrow{fx=3.6, tx=3.6, fy=6-\dist*\i, ty=4.9-\dist*\i, arrowhead={->}}
+     \arrow{fx=3.6, tx=3.6, ty=4.25-\dist*\i, fy=4.5-\dist*\i, arrowhead={->}}
+
+     \arrow{fx=2.4, tx=2.4, fy=6-\dist*\i, ty=3.9-\dist*\i, arrowhead={->}}
+     \arrow{fx=2.4, tx=2.4, ty=3.1-\dist*\i, fy=3.5-\dist*\i, arrowhead={->}}
+
+     \arrow{fx=5.5, tx=6.0, fy=5.0-\dist*\i, ty=5.0-\dist*\i, arrowhead={}}
+     \arrow{fx=4.3, tx=6.0, fy=3.7-\dist*\i, ty=3.7-\dist*\i, arrowhead={}}
+     \arrow{fx=3.1, tx=6.0, fy=2.4-\dist*\i, ty=2.4-\dist*\i, arrowhead={}}
+     \arrow{fx=6, tx=6.0, fy=2.4-\dist*\i, ty=5.6-\dist*\i, arrowhead={->}}
+
+     \networklayer{width=1, height=1, depth=5, yoff=6-\dist*\i, color=\currcol,
+       textmiddle=\begin{varwidth}{10em}\centering\footnotesize{
+           \pgfkeys{/c/random/.cd,\i} ${\sim}\pgfkeys{/c/random/.cd,\i p}$~parameters
+         }\end{varwidth}}
+
+     \rectangle{xoff=5.5, yoff=5.85-\dist*\i, width=2.2, height=1, text=\footnotesize{Aggregation}}
+     \arrow{fx=7.75, tx=8.1, fy=6.3-\dist*\i, ty=6.3-\dist*\i}
+
+     \networklayer{xoff=8.5, yoff=6.15-\dist*\i, zoff=0.5, depth=0.1, width=0.2,
+       height=0.8, color=gray!50!}
+     \arrow{fx=8.6, tx=9.3, fy=6.3-\dist*\i, ty=6.3-\dist*\i, arrowhead={}}
+  }
+
+  \arrow{fx=9.3, fy=6.3, ty=6.3-\dist*2, tx=9.3, arrowhead={}}
+  \arrow{fx=9.3, fy=6.3-\dist*1, ty=6.3-\dist*1, tx=9.8, arrowhead={->}}
+  \rectangle{height=1, width=1.8, xoff=10, yoff=6.3-\dist*1-0.5,
+    text=\begin{varwidth}{6em}\centering\footnotesize{Averaged ensemble}\end{varwidth}}
+  \arrow{fx=11.85, fy=6.3-\dist*1, ty=6.3-\dist*1, tx=12.5, arrowhead={->}}
+  \networklayer{xoff=12.8, yoff=6.0-\dist*1, zoff=0.0, depth=0.1, width=0.2,
+    height=0.8, color=gray!50!, textbelow=\footnotesize{Labels}}
+
+\end{neuralnet}
+
+\end{document}
